@@ -1,10 +1,11 @@
 # Gavriilidou_et_al_Flavos_ComparativeGenomics
 
-Authors: Asimenia Gavriilidou (1,*), Johanna Gutleben (2), Dennis Versluis (1), Francesca Forgiarini (1), Mark W.J. van Passel (1,a), Colin J. Ingham (2), Hauke Smidt (1), Detmer Sipkema (1)
+Authors: Asimenia Gavriilidou (1), Johanna Gutleben (2), Dennis Versluis (1), Francesca Forgiarini (1), Mark W.J. van Passel (1,a), Colin J. Ingham (2), Hauke Smidt (1), Detmer Sipkema (1)
 
-Affiliations: 1) Laboratory of Microbiology, Wageningen University & Research, Wageningen, The Netherlands
-              2) Hoekmine BV, Utrecht, The Netherlands
-              a)Center for Infectious Disease Control, National Institute for Public Health and the Environment, Bilthoven, the Netherlands
+Affiliations: 
+1) Laboratory of Microbiology, Wageningen University & Research, Wageningen, The Netherlands
+2) Hoekmine BV, Utrecht, The Netherlands
+a) Center for Infectious Disease Control, National Institute for Public Health and the Environment, Bilthoven, the Netherlands
 
 Correspondence: Asimenia Gavriilidou (asimenia.gavriilidou[at]wur.nl)
 
