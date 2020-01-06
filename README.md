@@ -13,7 +13,7 @@ This repository contains all the input files and codes used for analysis in the 
 
 Below is a short description of the repository structure:
 
-*Genome Assembly and Annotation Workflow*
+**Genome Assembly and Annotation Workflow**
 
 Assembly_Annotation.Rmd - R Markdown file containing bash commands and information on the whole genome sequencing data processing done on a Linux server.
 
