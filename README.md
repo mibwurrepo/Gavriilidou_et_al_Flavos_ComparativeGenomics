@@ -9,7 +9,7 @@ a) Center for Infectious Disease Control, National Institute for Public Health a
 
 Correspondence: Asimenia Gavriilidou (asimenia.gavriilidou[at]wur.nl)
 
-This repository contains all the input files and codes used for analysis in the research article by Gavriilidou A, et al. (2020). Comparative genomic analysis of Flavobacteriaceae: insights into carbohydrate metabolism, gliding motility and secondary metabolite biosynthesis. *Submitted*.  
+This repository contains all the input files and codes used for analysis in the research article by Gavriilidou A, et al. (2020). Comparative genomic analysis of *Flavobacteriaceae*: insights into carbohydrate metabolism, gliding motility and secondary metabolite biosynthesis. *Submitted*.  
 
 Below is a short description of the repository structure:
 
