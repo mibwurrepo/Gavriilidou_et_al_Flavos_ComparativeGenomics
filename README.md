@@ -17,4 +17,7 @@ Below is a short description of the repository structure:
 
 Assembly_Annotation.Rmd - R Markdown file containing bash commands and information on the whole genome sequencing data processing done on a Linux server.
 
+**Functional Profiling Analysis**
+
+Functional_Profiling_Data_Analysis.Rmd - R Markdown file with all R scripts and additional information for analysing the genome annotation data.
 
