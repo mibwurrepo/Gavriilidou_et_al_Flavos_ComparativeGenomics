@@ -1,0 +1,8 @@
+---
+title: "Comparative genomic analysis of Flavobacteriaceae: insights into carbohydrate metabolism, gliding motility and secondary metabolite biosynthesis"
+author: "Asimenia Gavriilidou"
+date: "February 10, 2020"
+output:
+html_document: default
+pdf_document: default
+---
