@@ -1,14 +1,9 @@
 ---
-title: "Comparative genomic analysis of Flavobacteriaceae: insights into carbohydrate
-  metabolism, gliding motility and secondary metabolite biosynthesis"
+title: "Comparative genomic analysis of Flavobacteriaceae: insights into carbohydrate metabolism, gliding motility and secondary metabolite biosynthesis"
 author: "Asimenia Gavrillidou"
 date: "February 10, 2020"
 output: html_document
 ---
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
 #Analysis of Flavobacteriaceae whole genomes sequencing data:
 
