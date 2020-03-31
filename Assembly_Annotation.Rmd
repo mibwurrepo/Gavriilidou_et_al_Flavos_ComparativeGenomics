@@ -36,3 +36,4 @@ A .fasta file (adapters.fa) including all Truseq adapter sequences found in the 
 ```{r, eval=FALSE}
 java -jar ~/trimmomatic-0.32.jar PE -threads 12 -phred33 ~/2_1.fastq ~/2_2.fastq ~/R1.paired.fq ~/R1.unpaired.fq ~/R2.paired.fq ~/R2.unpaired.fq ILLUMINACLIP:~/adapters.fa:2:30:10 HEADCROP:15 CROP:100 LEADING:20 TRAILING:20 SLIDINGWINDOW:4:20 MINLEN:50
 ```
+
