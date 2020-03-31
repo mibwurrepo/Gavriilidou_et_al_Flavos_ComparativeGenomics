@@ -1,5 +1,5 @@
 ---
-title: "Comparative genomic analysis of Flavobacteriaceae: insights into carbohydrate
+title: "Comparative genomic analysis of *Flavobacteriaceae*: insights into carbohydrate
   metabolism, gliding motility and secondary metabolite biosynthesis"
 author: "Asimenia Gavrillidou"
 date: "March 31, 2020"
@@ -10,7 +10,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-#Analysis of Flavobacteriaceae whole genomes sequencing data:
+#Analysis of *Flavobacteriaceae* whole genomes sequencing data:
 
 Illumina MiSeq an HiSeq sequencing data of Flavobacteriaceae genomes were deposited at the the European Nucleotide Archive (ENA). Study accession number........
 
