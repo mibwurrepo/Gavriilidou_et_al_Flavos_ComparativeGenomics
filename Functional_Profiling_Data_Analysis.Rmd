@@ -6,3 +6,352 @@ output:
 html_document: default
 pdf_document: default
 ---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+#Functional Profiling
+
+This analysis was done using R (version 3.5.0) and RStudio.
+
+##Comparison of Pfam profiles of all strains across taxonomic groups  
+
+Input table: Relative abundance of Pfam annotations per group 
+
+```{r, eval=FALSE}
+#Set working directory
+setwd("D:/Phd/FLAVOS/Flavos Paper/Input tables")
+
+#Load all required packages
+library(vegan)
+library(phyloseq)
+library(ggplot2)
+
+pfams_all <- read.csv("Rel_Abund_GeneCount_Pfam_ALL.csv", header = T)
+row.names(pfams_all) <- pfams_all$Func_id
+pfams_all <- pfams_all[,-c(1,2)]
+
+#Transpose table
+t.pfams_all <- t(pfams_all)
+
+##Import metadata-groups
+metadata_groups <- read.csv("Metadata_Groups.csv", header = T)
+row.names(metadata_groups) <- metadata_groups$Genome_name
+
+#Calculate distances (Bray-Curtis dissimilarity)
+diss.pfams_all <- vegdist(t.pfams_all, method = 'bray')
+
+#Permanova
+permanova_all <- adonis(diss.pfams_all~ metadata_groups$Groups, data = metadata_groups, permutations = 999, method = "bray")
+print(as.data.frame(permanova_all$aov.tab)["metadata_groups$Groups", "Pr(>F)"]) ##0.001
+
+#NMDS using Phyloseq
+#set "otu_table" -> pfams are rows and genomes (samples) are columns
+pfams_all = otu_table(pfams_all, taxa_are_rows = T)
+
+metadata_groups = sample_data(metadata_groups)
+
+#Create phyloseq object
+physeq_all = phyloseq(pfams_all, metadata_groups)
+
+#Ordination
+ord_groups <- ordinate(physeq_all, "NMDS", "bray")
+
+#Calculate stress of ordination
+ord_groups$stress #[1] 0.0941758
+
+#Create NMDS plot
+p = plot_ordination(physeq_all, ord_groups, type = "samples", color = "Groups")
+p_ord <- p + scale_color_manual(values = c("#33c633", "#253494", "#f98b8b"), name = "Taxa") + geom_point(size = 3) + theme(axis.line = element_line(colour="grey"), panel.background=element_blank(), text = element_text(size = 20, family = "Arial")) 
+NMDS_Pfams_all <- print(p_ord)
+```
+
+##Comparison of Pfam profiles of all Flavobacteriaceae strains between different clades and host- and non-host associated strains
+
+Input table: Relative abundance of Pfam annotations per Flavobacteriaceae clade
+
+```{r, eval=FALSE}
+#Load all required packages
+library(vegan)
+library(phyloseq)
+library(ggplot2)
+
+pfams1 <- read.csv("Rel_Abund_GeneCount_Pfams_FLAVOS.csv", header = T)
+pfams_id1 <- pfams1[,c(1)]
+row.names(pfams1) <- pfams_id1
+pfams1 <- pfams1[,-c(1,2)]
+
+#Transpose table
+t.pfams1 <- t(pfams1)
+
+##Import metadata-Clades
+metadata1 <- read.csv("Metadata_FLAVOS_comb.csv", header = T)
+genomes1 <- metadata1[,c(1)]
+row.names(metadata1) <- genomes1
+metadata1 <- metadata1[,-c(1)]
+
+#Calculate distances (Bray-Curtis dissimilarity)
+diss.pfams1 <- vegdist(t.pfams1, method = 'bray')
+
+#Permanova
+permanova <- adonis(diss.pfams1 ~ metadata1$Clades, data = metadata1, permutations = 999, method = "bray")
+print(as.data.frame(permanova$aov.tab)["metadata1$Clades", "Pr(>F)"]) ##0.001
+
+permanova <- adonis(diss.pfams1 ~ metadata1$Association, data = metadata1, permutations = 999, method = "bray")
+print(as.data.frame(permanova$aov.tab)["metadata1$Association", "Pr(>F)"]) ##0.593
+
+#NMDS using Phyloseq 
+#set "otu_table" -> pfams are rows and genomes (samples) are columns
+pfams1 = otu_table(pfams1, taxa_are_rows = T)
+
+#import metadata 
+metadata1 <- read.csv("Metadata_FLAVOS_comb.csv", header = T)
+genomes1 <- metadata1[,c(1)]
+row.names(metadata1) <- genomes1
+metadata1 <- metadata1[,-c(1)]
+metadata1 = sample_data(metadata1)
+
+#Create phyloseq object
+physeq1 = phyloseq(pfams1, metadata1)
+
+#Ordination
+ord_clades <- ordinate(physeq1, "NMDS", "bray")
+
+#Calculate stress 
+ord_clades$stress ## 0.1646015
+
+#NMDS plot
+p1 = plot_ordination(physeq1, ord_clades, type = "samples", color = "Clades")
+p_ord1 <- p1 + scale_color_manual(values = c("#8c8c8c", "#756bb1", "#39ae9a", "#f9bbbb")) + geom_point(size = 3) + theme(axis.line = element_line(colour="grey"), panel.background=element_blank(), text = element_text(size = 20, family = "Arial"))
+print(p_ord1)
+```
+
+##Unique and shared protein families between groups (Flavobacteriaceae, Cyanobacteria and Proteobacteria) and clades (within Flavobacteriaceae) 
+
+The unique and shared Pfams were calculated manually from the **Rel_Abund_GeneCount_Pfam_ALL.csv** table.
+
+```{r, eval=FALSE}
+#Venn diagrams
+##Load required package
+library(VennDiagram)
+
+#Groups
+Venn_groups <- VennDiagram::draw.triple.venn(area1 = 3843, area2 = 2645, area3 = 3234, n12 = 2003, n23 = 1838, n13 = 2356, n123 = 1648, category = c("Flavobacteriaceae", "Cyanobacteria", "Proteobacteria"), fill = c("darkblue", "#33c633", "#f94242"), lty = "blank", rotation.degree = 30, cex = 1.2, cat.cex = 1, cat.fontfamily = "Arial", fontfamily = "Arial", cat.dist = c(0.08, 0.05, 0.05), cat.pos = c(-20, 20, 150))
+
+#Clades
+Venn_clades <- VennDiagram::draw.quad.venn(area1 = 3551, area2 = 2499, area3 = 2554, area4 = 2415, n12 = 2406, n13 = 2384, n14 = 2338, n23 = 2081, n24 = 2031, n34 = 2018, n123 = 2058, n124 = 2021, n134 = 1999, n234 = 1856, n1234 = 1851, category = c("Marine", "Capnocytophaga", "Flavobacterium", "Tenacibaculum-Polaribacter"), fill = c("#39ae9a", "#8c8c8c", "#756bb1", "#f9bbbb" ), lty = "blank", cex = 1.0, cat.cex = 1.0, cat.fontfamily = "Arial", fontfamily = "Arial", cat.pos = c(-5, 5,-10, -5))
+```
+
+To check which Pfams contribute most to the differences between taxonomic groups and within Flavobacteriaceae, we did SIMilarity PERcentage (SIMPER) analysis.
+
+##Most contributing pfams between major taxonomic groups
+
+```{r, eval=FALSE}
+#Load required package
+library(vegan)
+
+setwd("D:/Phd/FLAVOS/Flavos Paper/Input tables")
+pfams_all <- read.csv("Rel_Abund_GeneCount_Pfam_ALL.csv", header = TRUE)
+pfams_id <- pfams_all[,c(1)]
+row.names(pfams_all) <- pfams_id
+pfams_all <- pfams_all[,-c(1,2)]
+
+#Transpose table
+pfams.t_all <- t(pfams_all)
+
+#Hellinger transformation
+t.pfams_all <- decostand(pfams.t_all, method = "total")
+
+#Remove columns (Pfams) that sum to zero
+t.pfams_w_not_col_zeros_all <- t.pfams_all[,colSums(pfams.t_all)!=0]
+
+#Import metadata
+metadata_pfams_all <- read.csv("Metadata_Groups.csv", header = T)
+groups <- as.character(metadata_pfams_all$Groups)
+
+#SIMPER
+data_pfams_all <- cbind(t.pfams_w_not_col_zeros, groups)
+simper <- simper(data_pfams_all[,1:5173], group = data_pfams_all$groups, permutations = 999, trace = T)
+summary <- summary(simper, ordered = T, digits =3)
+
+##SIMPER does pair-wise comparisons
+
+Flavos_Proteos <- as.data.frame(summary["Flavobacteria_Proteobacteria"])
+Flavos_Cyanos <- as.data.frame(summary["Flavobacteria_Cyanobacteria"])
+Proteos_Cyanos <- as.data.frame(summary["Proteobacteria_Cyanobacteria"])
+
+##Write output in .csv for further analysis
+write.csv(Flavos_Proteos, file="Flavos_Proteos_SIMPER.csv")
+write.csv(Flavos_Cyanos, file="Flavos_Cyanos_SIMPER.csv")
+write.csv(Proteos_Cyanos, file="Proteos_Cyanos_SIMPER.csv")
+```
+
+##Most contributing pfams within Flavobacteriaceae clades
+
+```{r, eval=FALSE}
+#Load required package
+library(vegan)
+
+setwd("D:/Phd/FLAVOS/Flavos Paper/Input tables")
+pfams_flavos <- read.csv("Rel_Abund_GeneCount_Pfams_FLAVOS.csv", header = TRUE)
+pfams_id_flavos <- pfams_flavos[,c(1)]
+row.names(pfams_flavos) <- pfams_id_flavos
+pfams_flavos <- pfams_flavos[,-c(1,2)]
+
+#Transpose table
+pfams.t_flavos <- t(pfams_flavos)
+
+#Hellinger transformation
+t.pfams_flavos <- decostand(pfams.t_flavos, method = "total")
+
+#Remove columns (Pfams) that sum to zero
+t.pfams_w_not_col_zeros_flavos <- t.pfams_flavos[,colSums(pfams.t_flavos)!=0]
+
+#Import metadata
+metadata_pfams_flavos <- read.csv("Metadata_Clades.csv", header = T)
+clades <- as.character(metadata_pfams_flavos$Clade)
+
+
+#SIMPER
+data_pfams_flavos <- cbind(t.pfams_w_not_col_zeros_flavos, clades)
+simper <- simper(data_pfams_flavos[,1:3843], group = data_pfams_flavos$clades, permutations = 999, trace = T)
+summary_flavos <- summary(simper, ordered = T, digits = 3)
+
+##SIMPER does pair-wise comparisons
+Marine_Flavobacterium <- as.data.frame(summary_flavos["Marine_Flavobacterium"])
+Marine_Capnocytophaga <- as.data.frame(summary_flavos["Marine_Capnocytophaga"])
+Marine_Tenacibaculum <- as.data.frame(summary_flavos["Marine_Tenacibaculum-Polaribacter"])
+Flavobacterium_Capnocytophaga <- as.data.frame(summary_flavos["Flavobacterium_Capnocytophaga"])
+Flavobacterium_Tenacibaculum <- as.data.frame(summary_flavos["Flavobacterium_Tenacibaculum-Polaribacter"])
+Capnocytophaga_Tenacibaculum <- as.data.frame(summary_flavos["Capnocytophaga_Tenacibaculum-Polaribacter"])
+
+##Write output in .csv for further analysis
+write.csv(Marine_Flavobacterium, file = "Marine_Flavobacterium_SIMPER_HT.csv")
+write.csv(Marine_Capnocytophaga, file = "Marine_Capnocytophaga_SIMPER_HT.csv")
+write.csv(Marine_Tenacibaculum, file = "Marine_Tenacibaculum_SIMPER_HT.csv")
+write.csv(Flavobacterium_Capnocytophaga, file = "Flavobacterium_Capnocytophaga_SIMPER_HT.csv")
+write.csv(Flavobacterium_Tenacibaculum, file = "Flavobacterium_Tenacibaculum_SIMPER_HT.csv")
+write.csv(Capnocytophaga_Tenacibaculum, file = "Capnocytophaga_Tenacibaculum_SIMPER_HT.csv")
+```
+
+The results from the pair-wise comparisons were further analysed in Excel. 
+Only Pfams with the highest significant contribution (> 0.2%, p < 0.05) to the dissimilarity are shown.
+
+#Carbohydrate metabolism and transport
+
+#Compare frequency of CAZymes between major taxonomic groups and within Flavobacteriaceae
+```{r, eval=FALSE}
+#Load required package
+library(dplyr)
+
+#Between taxa
+##Import table
+data <- read.csv("Cazymes_Frequency_Taxa.csv", header = TRUE)
+colnames(data) <- c("GHs/Mbp", "PLs/Mbp", "CEs/Mbp", "GTs/Mbp", "AAs/Mbp", "CBMs/Mbp", "Taxa")
+
+##Kruskal-Wallis test (a=0.05)
+kruskal.test(data$`GHs/Mbp`, data = data, g = data$Taxa) ## p-value = 8.425e-05
+kruskal.test(data$`PLs/Mbp`, data = data, g = data$Taxa) ##p-value = 0.001825
+kruskal.test(data$`CEs/Mbp`, data = data, g = data$Taxa) ##p-value = 0.0004612
+kruskal.test(data$`GTs/Mbp`, data = data, g = data$Taxa) ##p-value = 0.01724
+kruskal.test(data$`AAs/Mbp`, data = data, g = data$Taxa) ##p-value = 0.05073
+kruskal.test(data$`CBMs/Mbp`, data = data, g = data$Taxa) ##p-value = 4.263e-06
+
+#Between Clades
+##Import table
+data <- read.csv("Cazymes_Frequency_Clades.csv", header = TRUE)
+colnames(data) <- c("GHs/Mbp", "PLs/Mbp", "CEs/Mbp", "GTs/Mbp", "AAs/Mbp", "CBMs/Mbp", "Clades")
+
+##Kruskal-Wallis test (a=0.05)
+kruskal.test(data$`GHs/Mbp`, data = data, g = data$Clades) ##  p-value = 0.2372
+kruskal.test(data$`PLs/Mbp`, data = data, g = data$Clades) ##p-value = 0.0402
+kruskal.test(data$`CEs/Mbp`, data = data, g = data$Clades) ##p-value = 0.436
+kruskal.test(data$`GTs/Mbp`, data = data, g = data$Clades) ##p-value = 0.09747
+kruskal.test(data$`AAs/Mbp`, data = data, g = data$Clades) ##p-value = 0.5607
+kruskal.test(data$`CBMs/Mbp`, data = data, g = data$Clades) ##p-value = 0.05646
+```
+
+## CAZymes per Mb in the genomes between different taxonomic groups and within Flavobacteriaceae clades
+
+We used the Output file: **Mean_Rel_Abund_Cazymes.xlsx** from the Genome Annotation section.
+Then we created two separate files with the Mean Relative Abundance of the different CAZymes (GHs, PLs, CEs, GTs and CBMs) per taxon and per clade.
+
+```{r, eval=FALSE}
+#Barplots
+##Load required packages
+library(ggplot2)
+library(dplyr)
+library(ggpubr)
+
+##Per taxon
+df_taxa <- read.csv("Barplots_Mean_Taxa.csv", header=TRUE)
+p <- ggplot(df_taxa, aes(x=Cazymes, y=Mean, fill=Taxa))+geom_bar(position = position_dodge(), stat = "identity", colour='black')+geom_errorbar(aes(ymin=Mean+SE, ymax=Mean-SE), position = position_dodge(0.9), width=0.25)
+p1 <- p+labs(x="CAZymes", y="Mean Relative Abundance")+theme(axis.line = element_line(colour="grey"), panel.background=element_blank(), text=element_text(size = 20, family = "Arial"))+scale_fill_manual(values=c("#33c633", "#253494", "#f94242"))
+
+#Per Clade
+df_clades <- read.csv("Barplots_Mean_Clades.csv", header = TRUE)
+p2 <- ggplot(df_clades, aes(x=Cazymes, y=Mean, fill=Clades))+geom_bar(position = position_dodge(), stat = "identity", colour='black')+geom_errorbar(aes(ymin=Mean+SE, ymax=Mean-SE), position = position_dodge(0.9), width=0.25)
+p3 <- p2+labs(x="CAZymes", y="Mean Relative Abundance")+theme(axis.line = element_line(colour="grey"), panel.background=element_blank(), text=element_text(size = 20, family = "Arial"))+scale_fill_manual(values=c("#8c8c8c", "#756bb1", "#39ae9a", "#f9bbbb"))
+
+final_plot <- ggarrange(p1, p3, nrow=1)
+final_plot
+
+###Then you use 'Export' and 'Save as Image' options to get the final plot in the desired dimensions
+```
+
+#Gliding Motility and Type 9 Secretion 
+
+We created a presence-absence table with the Gliding motility and T9SS proteins found in the analysed genomes after BLASTp searches.
+
+Input table: **Gld_T9SS_All.csv**
+
+```{r, eval=FALSE}
+#Heatmap
+##Load required packages
+library(devtools)
+library(ComplexHeatmap) 
+library(circlize) 
+
+#Import table
+data <- read.csv("Gld_T9SS_All.csv", header = TRUE)
+genomes <- data[,c(1)]
+row.names(data) <- genomes
+data <- data[,-c(1)]
+data <- as.matrix (data)
+
+#Import metadata
+metadata <- read.csv("Metadata_Gld_T9SS.csv", header = TRUE)
+gliding <- as.character(metadata$Motility)
+groups <- as.character(metadata$Groups) 
+
+#Heatmap input table
+data2 <- cbind(data, gliding, groups)
+data2 <- as.data.frame(data2)
+colnames(data2) <-  c("GldA", "GldF", "GldG", "GldB",	"GldD", 	"GldH", 	"GldI",	"GldJ",	"GldK", 	"GldL",	"GldM",	"GldN",	"SprA",	"SprE", 	"SprF",	"SprT", 	"PorQ",	"PorU", "PorV",	"SprB",	"RemA",	"SigP",	"PorX",	"PorY",	"PorZ",	"SprC",	"SprD", "Motility", "Groups")
+
+#Set colors for the main heatmap
+col_fun = colorRamp2(c(0,1), c("white", "#c6dbef"))
+
+#Set colors for annotations
+col_motility <- c("blue", "black", "#d93476", "white")
+names(col_motility) <- c("gliding", "non-gliding", "other", "unknown")
+col_groups <- c("#39ae9a", "#8c8c8c", "#756bb1", "#f9bbbb", "#33c633", "#f94242", "#faf59d")
+names(col_groups) <- c("Marine", "Capnocytophaga", "Flavobacterium", "Tenacibaculum-Polaribacter", "Cyanobacteria", "Proteobacteria", "Bacteroidetes")
+
+#Create annotations
+ha = rowAnnotation(Motility = anno_simple(data2$Motility, which = "row", gp = gpar(fontsize=10), col = col_motility), annotation_name_side = "bottom", show_annotation_name = TRUE, show_legend = TRUE)
+ha1 = rowAnnotation(Groups = anno_simple(data2$Groups, which = "row", gp = gpar(fontsize=10), col = col_groups), annotation_name_side = "bottom", show_annotation_name = TRUE, show_legend = TRUE)
+
+#Create legends for annotations
+lgd_ha = Legend(labels = c("T9SS-based gliding", "Non-gliding", "Other", "NA"), title = "Motility", legend_gp =gpar(fill=c("blue", "black", "#d93476", "white")))
+lgd_ha1 = Legend(labels = c("Marine", "Capnocytophaga", "Flavobacterium", "Tenacibaculum-Polaribacter", "Cyanobacteria", "Proteobacteria", "Bacteroidetes"), title = "Groups", legend_gp = gpar(fill=c("#39ae9a", "#8c8c8c", "#756bb1", "#f9bbbb", "#33c633", "#f94242", "#faf59d")))
+
+#Create heatmap
+ht = Heatmap(data, width = unit(10, "cm"), height = unit(20, "cm"), row_names_gp = gpar (fontsize=10, fontface="italic"), column_names_gp = gpar (fontsize=10), cluster_rows = FALSE, show_column_dend = FALSE, col = col_fun, show_heatmap_legend = FALSE, rect_gp = gpar(col = "white", lwd = 2), column_title_side = "top", cluster_columns = FALSE,left_annotation = ha, right_annotation = ha1)
+
+#Draw heatmap and legends
+draw(ht, heatmap_legend_list = list(lgd_ha, lgd_ha1))
+```
+
+
+
