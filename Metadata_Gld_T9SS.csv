@@ -1,0 +1,68 @@
+Strains,Motility,Groups
+A.wandonensis,gliding,Marine
+A.echinorum,gliding,Marine
+Aa_C5,non-gliding,Marine
+Aa_D4,non-gliding,Marine
+Aa_F7,gliding,Marine
+B.echini,non-gliding,Marine
+C.fucicola,gliding,Marine
+C.lytica,gliding,Marine
+C.tyrosinoxydans,gliding,Marine
+Dokdonia sp.,non-gliding,Marine
+D.pacifica,non-gliding,Marine
+Da_B9,non-gliding,Marine
+DN50,gliding,Marine
+DN105,non-gliding,Marine
+DN112,non-gliding,Marine
+E.adriatica,non-gliding,Marine
+F.agariphila,gliding,Marine
+F.spongicola,gliding,Marine
+G.saemankumensis,gliding,Marine
+K.algicida,gliding,Marine
+K.aquimaris,gliding,Marine
+K.periserrulae,non-gliding,Marine
+L.venerupis,non-gliding,Marine
+Lacinutrix sp.,gliding,Marine
+M.antarctica,non-gliding,Marine
+M.arcticus,non-gliding,Marine
+M.jejuensis,non-gliding,Marine
+M.pacifica,non-gliding,Marine
+M.polysiphoniae,gliding,Marine
+M.spongiicola,non-gliding,Marine
+M.vaceletii,non-gliding,Marine
+N.spongiae,gliding,Marine
+N.ulvanivorans,non-gliding,Marine
+Psychroserpens sp.,gliding,Marine
+R.myxolifaciens,non-gliding,Marine
+T.sedimentorum,non-gliding,Marine
+W.arenosi,gliding,Marine
+W.eximia,gliding,Marine
+W.jejuensis,unknown,Marine
+Winogradskyealla sp.,unknown,Marine
+Z.galactanivorans,gliding,Marine
+J.marina,non-gliding,Capnocytophaga
+G.marinus,non-gliding,Capnocytophaga
+I.halotolerans,non-gliding,Capnocytophaga
+S.oceani,gliding,Capnocytophaga
+P.marinum,gliding,Capnocytophaga
+F.johnsoniae,gliding,Flavobacterium
+F.branchiophilum,non-gliding,Flavobacterium
+F.psychrophilum,gliding,Flavobacterium
+F.columnare,gliding,Flavobacterium
+F.indicum,gliding,Flavobacterium
+L.maritimus,non-gliding,Tenacibaculum-Polaribacter
+T.adriaticum,gliding,Tenacibaculum-Polaribacter
+T.mesophilum,gliding,Tenacibaculum-Polaribacter
+P.haliotis,non-gliding,Tenacibaculum-Polaribacter
+Polaribacter sp.,gliding,Tenacibaculum-Polaribacter
+Anabaena sp.,other,Cyanobacteria
+C.watsonii,unknown,Cyanobacteria
+P.marinus,unknown,Cyanobacteria
+Synechococcus sp.,non-gliding,Cyanobacteria
+T.erythraeum,other,Cyanobacteria
+A.macleodii,non-gliding,Proteobacteria
+Ca. P. ubique,non-gliding,Proteobacteria
+I.loihiensis,non-gliding,Proteobacteria
+R.litoralis,non-gliding,Proteobacteria
+R.pomeroyi,non-gliding,Proteobacteria
+P.gingivalus,non-gliding,Bacteroidetes
