@@ -32,9 +32,7 @@ To improve the per base sequence quality, 10 bases were removed from the beggini
 Reads shorter than 20 bases were discarded.
 A .fasta file (adapters.fa) including all Truseq adapter sequences found in the reads as overrepresented sequences was used to remove them from the raw reads.
 
-
 java -jar ~/trimmomatic-0.32.jar PE -threads 12 -phred33 ~/RawReads2_1.fastq ~/RawReads2_2.fastq ~/R1.paired.fq ~/R1.unpaired.fq ~/R2.paired.fq ~/R2.unpaired.fq ILLUMINACLIP:~/adapters.fa:2:30:10 HEADCROP:15 CROP:100 LEADING:20 TRAILING:20 SLIDINGWINDOW:4:20 MINLEN:50
-
 
 After quality filtering, the reads were checked again with FASTQC. No additional quality filtering was needed.
 
@@ -54,5 +52,71 @@ For both sequence reads, the online version of BLASTn (default settings) was use
 All contigs that matched to a contaminant sequence on NCBI were manually removed from the assemblies.
 
 Output file: **Assembly_clean.fasta**
+
+###Draft assembly improvement (Pilon 1.22)
+
+Create a .bam file of quality-filtered reads aligned to the input genome:
+bowtie2-build <Assembly_clean.fasta> <indexed.genome>
+bowtie2-align -x <indexed.genome> -1 <R1.paired.fq> -2 <R2.paired.fq> -S <Assembly.sam> -t -p 4
+
+Convert .sam file to .bam file:
+samtools view -S <Assembly.sam> -b -o <Assembly.bam>
+
+Sort and index .bam file:
+samtools sort <Assembly.bam> <Assembly_sorted>
+samtools index <Assembly_indexed_sorted> 
+  
+Run Pilon:
+java -Xmx32G -jar ~/pilon-1.22.jar --genome Assembly_clean.fasta --frags Assembly.sorted.bam --outdir Pilon
+
+Output file: **Assembly_clean_Pilon.fasta**
+
+###Coverage per base calculation
+
+bedtools genomecov -d -ibam Assembly.sorted.bam -g Assembly_clean_Pilon.fasta > Assembly_coverage.txt
+awk '{sum+=$3}END{print sum/NR}' Assembly_coverage.txt
+
+###Quality control of draft assemblies
+
+~quast-4.6.3/quast.py Assembly_clean_Pilon.fasta -o ~/Quast
+
+###Completeness and Contamination of draft assemblies (CheckM)
+Before the comparative genomics analysis, we checked the completeness and contamination of all draft genomes (newly-sequenced and publicly available).
+
+Taxonomic-specific 
+checkm taxonomy_wf family Flavobacteriaceae -t 12 -x fasta ~/checkm_bins ~/Checkm_output_Taxonomic-specific
+
+Lineage-specific
+checkm lineage_wf -t 12 -x fasta ~/checkm_bins ~/Checkm_output
+
+#Genome Annotation
+
+##Annotation of CAZymes for all genomes included in the study based on http://bcb.unl.edu/dbCAN2/download/Databases/dbCAN-old@UGA/readme.txt 
+
+###Predict protein sequences
+/home/gavri003/prokka/bin/prokka --outdir <Prokka_annotations> --force --centre 20 --locustag <Assembly_Clean_Pilon.fasta>
+  
+Output file: **Prokka.faa**
+
+###Download dbCAN CAZyme domain HMM database
+wget http://csbl.bmb.uga.edu/dbCAN/download/dbCAN-fam-HMMs.txt
+
+###Prepare the HMM database for scan
+hmmpress dbCAN-fam-HMMs.txt
+
+###Scan the database
+hmmscan --domtblout Summary_Cazymes.out.dm ~/databases/dbCAN-fam-HMMs.txt Prokka.faa > Cazymes.out
+
+###Remove overlapping hits (if alignment > 80aa, use E-value < 1e-5, otherwise use E-value < 1e-3; covered fraction of HMM > 0.3)
+sh hmmscan-parser.sh Summary_Cazymes.out.dm > Cazymes.out.dm.ps
+
+###Write the output in a .txt file to open with R
+cat Cazymes.out.dm.ps > Cazymes.txt 
+
+For each genome we had a CAZyme annotation file. 
+Relative abundance of CAZyme genes (normalized by genome size) per genome between groups and clades were further calculated in Excel.
+
+Output file: **Mean_Rel_Abund_Cazymes.xlsx**
+
 
 
