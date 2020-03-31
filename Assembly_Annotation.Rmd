@@ -1,8 +1,8 @@
 ---
-title: "Comparative genomic analysis of *Flavobacteriaceae*: insights into carbohydrate
+title: "Comparative genomic analysis of Flavobacteriaceae: insights into carbohydrate
   metabolism, gliding motility and secondary metabolite biosynthesis"
 author: "Asimenia Gavrillidou"
-date: "March 31, 2020"
+date: "February 10, 2020"
 output: html_document
 ---
 
@@ -10,12 +10,29 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-#Analysis of *Flavobacteriaceae* whole genomes sequencing data:
+#Analysis of Flavobacteriaceae whole genomes sequencing data:
 
-Illumina MiSeq an HiSeq sequencing data of Flavobacteriaceae genomes were deposited at the the European Nucleotide Archive (ENA). Study accession number........
+Raw reads of Flavobacteriaceae genomes sequenced in this study were deposited at the the European Nucleotide Archive (ENA) under Study Accession Number PRJEB35092.
 
 The complete workflow:
 
     1. Trimming and Adapter removal of raw reads
     2. Genome Assembly and quality control
     3. Genome annotation
+
+##Trimming and Adapter removal of raw reads
+
+Analysis was performed in a Linux environment using the local server of the Laboratory of Microbiology at Wageningen University & Research.
+
+FASTQC 0.11.4 was used to check the quality of the raw reads.
+
+Quality filtering was performed by Trimmomatic 0.32
+
+To improve the per base sequence quality, 10 bases were removed from the beggining and the end of the reads.
+Reads shorter than 20 bases were discarded.
+A .fasta file (adapters.fa) including all Truseq adapter sequences found in the reads as overrepresented sequences was used to remove them from the raw reads.
+
+
+```{r, eval=FALSE}
+java -jar ~/trimmomatic-0.32.jar PE -threads 12 -phred33 ~/2_1.fastq ~/2_2.fastq ~/R1.paired.fq ~/R1.unpaired.fq ~/R2.paired.fq ~/R2.unpaired.fq ILLUMINACLIP:~/adapters.fa:2:30:10 HEADCROP:15 CROP:100 LEADING:20 TRAILING:20 SLIDINGWINDOW:4:20 MINLEN:50
+```
