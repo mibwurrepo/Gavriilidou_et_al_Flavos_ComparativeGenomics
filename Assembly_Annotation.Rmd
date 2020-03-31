@@ -17,7 +17,7 @@ Raw reads of Flavobacteriaceae genomes sequenced in this study were deposited at
 The complete workflow:
 
     1. Trimming and Adapter removal of raw reads
-    2. Genome Assembly and quality control
+    2. Genome Assembly and Quality control
     3. Genome annotation
 
 ##Trimming and Adapter removal of raw reads
@@ -36,4 +36,29 @@ A .fasta file (adapters.fa) including all Truseq adapter sequences found in the 
 ```{r, eval=FALSE}
 java -jar ~/trimmomatic-0.32.jar PE -threads 12 -phred33 ~/2_1.fastq ~/2_2.fastq ~/R1.paired.fq ~/R1.unpaired.fq ~/R2.paired.fq ~/R2.unpaired.fq ILLUMINACLIP:~/adapters.fa:2:30:10 HEADCROP:15 CROP:100 LEADING:20 TRAILING:20 SLIDINGWINDOW:4:20 MINLEN:50
 ```
+After quality filtering, the reads were checked again with FASTQC. No additional quality filtering was needed.
+
+##Genome Assembly and Quality Control
+
+For the MiSeq data, A5 assembler was used:
+
+```{r, eval=FALSE}
+a5_pipeline.pl --end=5 <paired.1.fastq> <paired.2.fastq> <assembly_A5>
+```
+
+For the Hiseq data, best k-mer size was predicted and then assembly with SPAdes followed. 
+```{r, eval=FALSE}
+##Prediction of best k-mer size using KmerGenie 1.6741
+~/kmergenie-1.6741/kmergenie ~/1_2.fastq
+
+##Assembly with SPAdes
+~/SPAdes-3.11.1-Linux/bin/spades.py -1 <R1.paired.fq> -2 <R1.paired.fq> --continue --careful -k 55 -o ~/Assembly_SPAdes
+```
+
+For both sequence reads, the online version of BLASTn (default settings) was used to identify potential contamination in the reads.
+
+All contigs that matched to a contaminant sequence on NCBI were manually removed from the assemblies.
+
+Output file: **Assembly_clean.fasta**
+
 
