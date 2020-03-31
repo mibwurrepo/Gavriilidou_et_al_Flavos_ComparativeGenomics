@@ -12,17 +12,13 @@ Correspondence: Asimenia Gavriilidou (asimenia.gavriilidou[at]wur.nl)
 This repository contains all the input files and codes used for analysis in the research article by Gavriilidou A, et al. (2020). Comparative genomic analysis of *Flavobacteriaceae*: insights into carbohydrate metabolism, gliding motility and secondary metabolite biosynthesis. *Under Review*.  
 
 Below is a short description of the repository structure:
+```{r, eval=FALSE}
+Assembly_Annotation.Rmd  #R Markdown file containing bash commands and information on the whole genome sequencing data processing done on a Linux server. 
 
-**Genome Assembly and Annotation Workflow**
-|
-Assembly_Annotation.Rmd - R Markdown file containing bash commands and information on the whole genome sequencing data processing done on a Linux server.
+Functional_Profiling_Data_Analysis.Rmd #R Markdown file with all R scripts and additional information for analysing the genome annotation data.
 
-**Functional Profiling Analysis**
-
-Functional_Profiling_Data_Analysis.Rmd - R Markdown file with all R scripts and additional information for analysing the genome annotation data.
-
-**input**
-Includes all input files for the Functional Profiling Analysis
+input #Includes all input files for the Functional Profiling Analysis
+```
 
 For any queries and additional information regarding the analysis described here: asimenia.gavriilidou@wur.nl 
 
