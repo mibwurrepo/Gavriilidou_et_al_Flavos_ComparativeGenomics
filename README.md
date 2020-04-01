@@ -6,7 +6,7 @@ Affiliations:
 1) Laboratory of Microbiology, Wageningen University & Research, Wageningen, The Netherlands
 2) Hoekmine BV, Utrecht, The Netherlands
 
-Correspondence: Asimenia Gavriilidou (asimenia.gavriilidou[at]wur.nl)
+Correspondence: Asimenia Gavriilidou (asimenia.gavriilidou@wur.nl)
 
 This repository contains all the input files and codes used for analysis in the research article by Gavriilidou A, et al. (2020). Comparative genomic analysis of *Flavobacteriaceae*: insights into carbohydrate metabolism, gliding motility and secondary metabolite biosynthesis. *Under Review*.  
 
