@@ -16,7 +16,7 @@ Assembly_Annotation.Rmd  #R Markdown file containing bash commands and informati
 
 Functional_Profiling_Data_Analysis.Rmd #R Markdown file with all R scripts and additional information for analysing the genome annotation data.
 
-input #Includes all input files for the Functional Profiling Analysis
+input #Includes all input files used in the Functional Profiling Data Analysis
 ```
 
 For any queries and additional information regarding the analysis described here: asimenia.gavriilidou@wur.nl 
