@@ -327,7 +327,7 @@ groups <- as.character(metadata$Groups)
 #Heatmap input table
 data2 <- cbind(data, gliding, groups)
 data2 <- as.data.frame(data2)
-colnames(data2) <-  c("GldA", "GldF", "GldG", "GldB",	"GldD", 	"GldH", 	"GldI",	"GldJ",	"GldK", 	"GldL",	"GldM",	"GldN",	"SprA",	"SprE", 	"SprF",	"SprT", 	"PorQ",	"PorU", "PorV",	"SprB",	"RemA",	"SigP",	"PorX",	"PorY",	"PorZ",	"SprC",	"SprD", "Motility", "Groups")
+colnames(data2) <-  c("GldA", "GldF", "GldG", "GldB",	"GldD", "GldH", "GldI",	"GldJ",	"GldK", "GldL",	"GldM",	"GldN",	"SprA",	"SprE", 	"SprF",	"SprT", "PorQ",	"PorU", "PorV",	"SprB",	"RemA",	"SigP",	"PorX",	"PorY",	"PorZ",	"SprC",	"SprD", "Motility", "Groups")
 
 #Set colors for the main heatmap
 col_fun = colorRamp2(c(0,1), c("white", "#c6dbef"))
