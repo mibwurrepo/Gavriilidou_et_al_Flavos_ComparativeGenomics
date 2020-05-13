@@ -14,6 +14,7 @@ The complete workflow:
     1. Trimming and Adapter removal of raw reads
     2. Genome Assembly and Quality control
     3. Genome annotation
+    4. Phylogenomic Analysis
 
 ##Trimming and Adapter removal of raw reads
 
@@ -112,6 +113,46 @@ For each genome we had a CAZyme annotation file.
 Relative abundance of CAZyme genes (normalized by genome size) per genome between groups and clades were further calculated in Excel.
 
 Output file: **Mean_Rel_Abund_Cazymes.xlsx**
+
+##Annotation of PULs for all genomes included in the analysis using Open Prediction of Polysaccharide Utilization Loci tool (PULPy) 
+
+###To install, follow guidelines at: https://github.com/WatsonLab/PULpy
+
+###Create a directory called "genomes" with final format and unique ID followed by "_genomic.fna.gz"
+
+###To zip all the .fna files in the directory
+cd /genomes
+gzip *.fna
+
+###To run it
+
+snakemake snakefile --use-conda --cores 4
+
+Output files: **_puls_sums.tsv** and ** _puls.tsv**
+
+#Phylogenomic Analysis
+
+##Annotation of single-copy marker genes with GTDBTk
+
+###To install, follow guidelines at:https://ecogenomics.github.io/GTDBTk/running/
+
+###Identify single-copy marker genes in the genomes
+
+gtdbtk identify --genome_dir genomes/ --out_dir identify_output --cpus 4
+
+###Align identified marker genes without including GTDB reference genomes in the multiple sequence alignment
+
+gtdbtk align --identify_dir identify_output/ --out_dir align_output --skip_gtdb_refs --cpus 4
+
+Output file: **_user_msa.fasta**
+
+##Build single-copy marker gene phylogenetic tree using FastTree 
+
+###To install, follow guidelines at: http://www.microbesonline.org/fasttree/#Install
+
+###To run it
+
+FastTree _user_msa.fasta > _Genome_Tree.tree
 
 
 
