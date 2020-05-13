@@ -7,7 +7,7 @@ output: html_document
 
 #Analysis of Flavobacteriaceae whole genomes sequencing data:
 
-Raw reads of Flavobacteriaceae genomes sequenced in this study were deposited at the the European Nucleotide Archive (ENA) under Study Accession Number **PRJEB35092**.
+Raw reads of Flavobacteriaceae genomes sequenced in this study were deposited at the the European Nucleotide Archive (ENA) under Study Accession Number __PRJEB35092__.
 
 The complete workflow:
 
@@ -20,7 +20,7 @@ The complete workflow:
 
 Analysis was performed in a Linux environment using the local server of the Laboratory of Microbiology at Wageningen University & Research.
 
-FASTQC 0.11.4 was used to check the quality of the raw reads.
+[FASTQC 0.11.4](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/INSTALL.txt) was used to check the quality of the raw reads.
 
 Quality filtering was performed by Trimmomatic 0.32
 
@@ -49,7 +49,7 @@ All contigs that matched to a contaminant sequence on NCBI were manually removed
 
 Output file: **Assembly_clean.fasta**
 
-###Draft assembly improvement (Pilon 1.22)
+###Draft assembly improvement [Pilon 1.22](https://github.com/broadinstitute/pilon/wiki).
 
 Create a .bam file of quality-filtered reads aligned to the input genome:
 bowtie2-build <Assembly_clean.fasta> <indexed.genome>
