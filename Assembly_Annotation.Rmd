@@ -20,7 +20,7 @@ The complete workflow:
 
 Analysis was performed in a Linux environment using the local server of the Laboratory of Microbiology at Wageningen University & Research.
 
-[FASTQC 0.11.4](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/INSTALL.txt) was used to check the quality of the raw reads.
+FASTQC 0.11.4 was used to check the quality of the raw reads. 
 
 Quality filtering was performed by Trimmomatic 0.32
 
