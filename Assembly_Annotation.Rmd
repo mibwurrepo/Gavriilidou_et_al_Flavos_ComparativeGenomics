@@ -128,13 +128,13 @@ gzip *.fna
 
 snakemake snakefile --use-conda --cores 4
 
-Output files: **_puls_sums.tsv** and ** _puls.tsv**
+Output files: **genome_puls_sums.tsv** and **genome_puls.tsv**
 
 #Phylogenomic Analysis
 
 ##Annotation of single-copy marker genes with GTDBTk
 
-###To install, follow guidelines at:https://ecogenomics.github.io/GTDBTk/running/
+To install, follow guidelines at:https://ecogenomics.github.io/GTDBTk/running/
 
 ###Identify single-copy marker genes in the genomes
 
@@ -144,15 +144,15 @@ gtdbtk identify --genome_dir genomes/ --out_dir identify_output --cpus 4
 
 gtdbtk align --identify_dir identify_output/ --out_dir align_output --skip_gtdb_refs --cpus 4
 
-Output file: **_user_msa.fasta**
+Output file: **prefix_user_msa.fasta**
 
 ##Build single-copy marker gene phylogenetic tree using FastTree 
 
-###To install, follow guidelines at: http://www.microbesonline.org/fasttree/#Install
+To install, follow guidelines at: http://www.microbesonline.org/fasttree/#Install
 
-###To run it
+FastTree prefix_user_msa.fasta > prefix_genome_tree.tree
 
-FastTree _user_msa.fasta > _Genome_Tree.tree
+Output file: **prefix_genome_tree.tree**
 
-
+Use the output file as input for iTOL (https://itol.embl.de/)
 
