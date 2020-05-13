@@ -7,7 +7,7 @@ output: html_document
 
 #Analysis of Flavobacteriaceae whole genomes sequencing data:
 
-Raw reads of Flavobacteriaceae genomes sequenced in this study were deposited at the the European Nucleotide Archive (ENA) under Study Accession Number PRJEB35092.
+Raw reads of Flavobacteriaceae genomes sequenced in this study were deposited at the the European Nucleotide Archive (ENA) under Study Accession Number **PRJEB35092**.
 
 The complete workflow:
 
@@ -87,7 +87,7 @@ checkm lineage_wf -t 12 -x fasta ~/checkm_bins ~/Checkm_output
 
 #Genome Annotation
 
-##Annotation of CAZymes for all genomes included in the study based on http://bcb.unl.edu/dbCAN2/download/Databases/dbCAN-old@UGA/readme.txt 
+##Annotation of CAZymes for all genomes included in the study based on [http://bcb.unl.edu/dbCAN2/download/Databases/dbCAN-old@UGA/readme.txt]
 
 ###Predict protein sequences
 /home/gavri003/prokka/bin/prokka --outdir <Prokka_annotations> --force --centre 20 --locustag <Assembly_Clean_Pilon.fasta>
@@ -95,7 +95,7 @@ checkm lineage_wf -t 12 -x fasta ~/checkm_bins ~/Checkm_output
 Output file: **Prokka.faa**
 
 ###Download dbCAN CAZyme domain HMM database
-wget http://csbl.bmb.uga.edu/dbCAN/download/dbCAN-fam-HMMs.txt
+wget [http://csbl.bmb.uga.edu/dbCAN/download/dbCAN-fam-HMMs.txt]
 
 ###Prepare the HMM database for scan
 hmmpress dbCAN-fam-HMMs.txt
@@ -116,13 +116,13 @@ Output file: **Mean_Rel_Abund_Cazymes.xlsx**
 
 ##Annotation of PULs for all genomes included in the analysis using Open Prediction of Polysaccharide Utilization Loci tool (PULPy) 
 
-To install, follow guidelines at: https://github.com/WatsonLab/PULpy
+To install, follow guidelines at: [https://github.com/WatsonLab/PULpy]
 
 Create a directory called "genomes" with final format and unique ID followed by "genome_name_genomic.fna.gz"
 
 To run it
 
-snakemake snakefile --use-conda --cores 4
+snakemake <snakefile> --use-conda --cores 4
 
 Output files: **genome_puls_sums.tsv** and **genome_puls.tsv**
 
@@ -130,25 +130,25 @@ Output files: **genome_puls_sums.tsv** and **genome_puls.tsv**
 
 ##Annotation of single-copy marker genes with GTDBTk
 
-To install, follow guidelines at:https://ecogenomics.github.io/GTDBTk/running/
+To install, follow guidelines at: [https://ecogenomics.github.io/GTDBTk/running/]
 
 ###Identify single-copy marker genes in the genomes
 
-gtdbtk identify --genome_dir genomes/ --out_dir identify_output --cpus 4
+gtdbtk identify --genome_dir genomes/ --out_dir <identify_output> --cpus 4
 
 ###Align identified marker genes without including GTDB reference genomes in the multiple sequence alignment
 
-gtdbtk align --identify_dir identify_output/ --out_dir align_output --skip_gtdb_refs --cpus 4
+gtdbtk align --identify_dir <identify_output/> --out_dir align_output --skip_gtdb_refs --cpus 4
 
 Output file: **prefix_user_msa.fasta**
 
 ##Build single-copy marker gene phylogenetic tree using FastTree 
 
-To install, follow guidelines at: http://www.microbesonline.org/fasttree/#Install
+To install, follow guidelines at: [http://www.microbesonline.org/fasttree/#Install]
 
-FastTree prefix_user_msa.fasta > prefix_genome_tree.tree
+FastTree <prefix_user_msa.fasta> > <prefix_genome_tree.tree>
 
 Output file: **prefix_genome_tree.tree**
 
-Use the output file as input for iTOL (https://itol.embl.de/)
+Use the output file as input for iTOL ([https://itol.embl.de/])
 
