@@ -7,7 +7,7 @@ output: html_document
 
 #Analysis of Flavobacteriaceae whole genomes sequencing data:
 
-Raw reads of Flavobacteriaceae genomes sequenced in this study were deposited at the the European Nucleotide Archive (ENA) under Study Accession Number __PRJEB35092__.
+Raw reads of Flavobacteriaceae genomes sequenced in this study were deposited at the the European Nucleotide Archive (ENA) under Study Accession Number PRJEB35092.
 
 The complete workflow:
 
@@ -49,7 +49,7 @@ All contigs that matched to a contaminant sequence on NCBI were manually removed
 
 Output file: **Assembly_clean.fasta**
 
-###Draft assembly improvement [Pilon 1.22](https://github.com/broadinstitute/pilon/wiki).
+###Draft assembly improvement Pilon 1.22.
 
 Create a .bam file of quality-filtered reads aligned to the input genome:
 bowtie2-build <Assembly_clean.fasta> <indexed.genome>
@@ -87,7 +87,7 @@ checkm lineage_wf -t 12 -x fasta ~/checkm_bins ~/Checkm_output
 
 #Genome Annotation
 
-##Annotation of CAZymes for all genomes included in the study based on [http://bcb.unl.edu/dbCAN2/download/Databases/dbCAN-old@UGA/readme.txt]
+##Annotation of CAZymes for all genomes included in the study based on http://bcb.unl.edu/dbCAN2/download/Databases/dbCAN-old@UGA/readme.txt
 
 ###Predict protein sequences
 /home/gavri003/prokka/bin/prokka --outdir <Prokka_annotations> --force --centre 20 --locustag <Assembly_Clean_Pilon.fasta>
@@ -95,7 +95,7 @@ checkm lineage_wf -t 12 -x fasta ~/checkm_bins ~/Checkm_output
 Output file: **Prokka.faa**
 
 ###Download dbCAN CAZyme domain HMM database
-wget [http://csbl.bmb.uga.edu/dbCAN/download/dbCAN-fam-HMMs.txt]
+wget http://csbl.bmb.uga.edu/dbCAN/download/dbCAN-fam-HMMs.txt
 
 ###Prepare the HMM database for scan
 hmmpress dbCAN-fam-HMMs.txt
@@ -116,7 +116,7 @@ Output file: **Mean_Rel_Abund_Cazymes.xlsx**
 
 ##Annotation of PULs for all genomes included in the analysis using Open Prediction of Polysaccharide Utilization Loci tool (PULPy) 
 
-To install, follow guidelines at: [https://github.com/WatsonLab/PULpy]
+To install, follow guidelines at: https://github.com/WatsonLab/PULpy
 
 Create a directory called "genomes" with final format and unique ID followed by "genome_name_genomic.fna.gz"
 
@@ -130,7 +130,7 @@ Output files: **genome_puls_sums.tsv** and **genome_puls.tsv**
 
 ##Annotation of single-copy marker genes with GTDBTk
 
-To install, follow guidelines at: [https://ecogenomics.github.io/GTDBTk/running/]
+To install, follow guidelines at: https://ecogenomics.github.io/GTDBTk/running/
 
 ###Identify single-copy marker genes in the genomes
 
@@ -144,11 +144,11 @@ Output file: **prefix_user_msa.fasta**
 
 ##Build single-copy marker gene phylogenetic tree using FastTree 
 
-To install, follow guidelines at: [http://www.microbesonline.org/fasttree/#Install]
+To install, follow guidelines at: http://www.microbesonline.org/fasttree/#Install
 
 FastTree <prefix_user_msa.fasta> > <prefix_genome_tree.tree>
 
 Output file: **prefix_genome_tree.tree**
 
-Use the output file as input for iTOL ([https://itol.embl.de/])
+Use the output file as input for iTOL (https://itol.embl.de/)
 
