@@ -118,7 +118,7 @@ Output file: **Mean_Rel_Abund_Cazymes.xlsx**
 
 ###To install, follow guidelines at: https://github.com/WatsonLab/PULpy
 
-###Create a directory called <genomes> with final format and unique ID followed by <_genomic.fna.gz>
+###Create a directory called "genomes" with final format and unique ID followed by "genome_name_genomic.fna.gz"
 
 ###To zip all the .fna files in the directory
 cd /genomes
