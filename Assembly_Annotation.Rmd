@@ -116,15 +116,11 @@ Output file: **Mean_Rel_Abund_Cazymes.xlsx**
 
 ##Annotation of PULs for all genomes included in the analysis using Open Prediction of Polysaccharide Utilization Loci tool (PULPy) 
 
-###To install, follow guidelines at: https://github.com/WatsonLab/PULpy
+To install, follow guidelines at: https://github.com/WatsonLab/PULpy
 
-###Create a directory called "genomes" with final format and unique ID followed by "genome_name_genomic.fna.gz"
+Create a directory called "genomes" with final format and unique ID followed by "genome_name_genomic.fna.gz"
 
-###To zip all the .fna files in the directory
-cd /genomes
-gzip *.fna
-
-###To run it
+To run it
 
 snakemake snakefile --use-conda --cores 4
 
