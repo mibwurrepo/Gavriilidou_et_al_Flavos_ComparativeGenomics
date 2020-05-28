@@ -301,6 +301,8 @@ df_clades <- read.csv("Barplots_Mean_Clades.csv", header = TRUE)
 p2 <- ggplot(df_clades, aes(x=Cazymes, y=Mean, fill=Clades))+geom_bar(position = position_dodge(), stat = "identity", colour='black')+geom_errorbar(aes(ymin=Mean+SE, ymax=Mean-SE), position = position_dodge(0.9), width=0.25)
 p3 <- p2+labs(x="CAZyme Classes", y="Mean Cazymes/Mbp")+theme(axis.line = element_line(colour="grey"), panel.background=element_blank(), text=element_text(size = 16, family = "Arial"))+scale_fill_manual(values=c("#8c8c8c", "#756bb1", "#39ae9a", "#f9bbbb"))+guides(fill=guide_legend(label.theme = element_text(face="italic", size=12)))
 
+#Combine both barplots (groups, clades) in one
+
 final_plot <- ggarrange(p1, p3, nrow=1)
 print(final_plot)
 
