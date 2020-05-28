@@ -26,6 +26,8 @@ setwd("D:/Phd/FLAVOS/Flavos Paper/Input tables")
 library(vegan)
 library(phyloseq)
 library(ggplot2)
+library(ggpubr)
+windowsFonts("Arial"=windowsFont("Arial"))
 
 pfams_all <- read.csv("Rel_Abund_GeneCount_Pfam_ALL.csv", header = T)
 row.names(pfams_all) <- pfams_all$Func_id
@@ -61,9 +63,11 @@ ord_groups <- ordinate(physeq_all, "NMDS", "bray")
 ord_groups$stress #[1] 0.0941758
 
 #Create NMDS plot
-p = plot_ordination(physeq_all, ord_groups, type = "samples", color = "Groups")
-p_ord <- p + scale_color_manual(values = c("#33c633", "#253494", "#f98b8b"), name = "Taxa") + geom_point(size = 3) + theme(axis.line = element_line(colour="grey"), panel.background=element_blank(), text = element_text(size = 20, family = "Arial")) 
-NMDS_Pfams_all <- print(p_ord)
+p_groups = plot_ordination(physeq_all, ord_groups, type = "samples", color = "Groups")
+p_ord_groups <- p_groups + scale_color_manual(values = c("#33c633", "#253494", "#f98b8b"), name = "Taxa") + geom_point(size = 5) + theme(legend.text = element_text(face="italic",size=16), axis.line = element_line(colour="grey"), panel.border=element_rect(fill=NA, colour = "grey"), text = element_text(size = 14, family = "Arial")) 
+
+print(p_ord_groups)
+
 ```
 
 ##Comparison of Pfam profiles of all Flavobacteriaceae strains between different clades and host- and non-host associated strains
@@ -71,59 +75,62 @@ NMDS_Pfams_all <- print(p_ord)
 Input table: Relative abundance of Pfam annotations per Flavobacteriaceae clade
 
 ```{r, eval=FALSE}
-#Load all required packages
-library(vegan)
-library(phyloseq)
-library(ggplot2)
 
-pfams1 <- read.csv("Rel_Abund_GeneCount_Pfams_FLAVOS.csv", header = T)
-pfams_id1 <- pfams1[,c(1)]
-row.names(pfams1) <- pfams_id1
-pfams1 <- pfams1[,-c(1,2)]
+pfams_flavos <- read.csv("Rel_Abund_GeneCount_Pfams_FLAVOS.csv", header = T)
+pfams_id_flavos <- pfams_flavos[,c(1)]
+row.names(pfams_flavos) <- pfams_id_flavos
+pfams_flavos <- pfams_flavos[,-c(1,2)]
 
 #Transpose table
-t.pfams1 <- t(pfams1)
+t.pfams_flavos <- t(pfams_flavos)
 
 ##Import metadata-Clades
-metadata1 <- read.csv("Metadata_FLAVOS_comb.csv", header = T)
-genomes1 <- metadata1[,c(1)]
-row.names(metadata1) <- genomes1
-metadata1 <- metadata1[,-c(1)]
+metadata_flavos <- read.csv("Metadata_FLAVOS_comb.csv", header = T)
+row.names(metadata1) <- metadata_flavos$Genome_name
+metadata_flavos <- metadata_flavos[,-c(1)]
 
 #Calculate distances (Bray-Curtis dissimilarity)
-diss.pfams1 <- vegdist(t.pfams1, method = 'bray')
+diss.pfams_flavos <- vegdist(t.pfams_flavos, method = 'bray')
 
 #Permanova
-permanova <- adonis(diss.pfams1 ~ metadata1$Clades, data = metadata1, permutations = 999, method = "bray")
-print(as.data.frame(permanova$aov.tab)["metadata1$Clades", "Pr(>F)"]) ##0.001
+permanova_clades <- adonis(diss.pfams_flavos ~ metadata_flavos$Clades, data = metadata_flavos, permutations = 999, method = "bray")
+print(as.data.frame(permanova_clades$aov.tab)["metadata_flavos$Clades", "Pr(>F)"]) ##0.001
 
-permanova <- adonis(diss.pfams1 ~ metadata1$Association, data = metadata1, permutations = 999, method = "bray")
-print(as.data.frame(permanova$aov.tab)["metadata1$Association", "Pr(>F)"]) ##0.593
+permanova_assoc <- adonis(diss.pfams_flavos ~ metadata_flavos$Association, data = metadata_flavos, permutations = 999, method = "bray")
+print(as.data.frame(permanova_assoc$aov.tab)["metadata_flavos$Association", "Pr(>F)"]) ##0.593
 
 #NMDS using Phyloseq 
 #set "otu_table" -> pfams are rows and genomes (samples) are columns
-pfams1 = otu_table(pfams1, taxa_are_rows = T)
+pfams_flavos = otu_table(pfams_flavos, taxa_are_rows = T)
 
-#import metadata 
-metadata1 <- read.csv("Metadata_FLAVOS_comb.csv", header = T)
-genomes1 <- metadata1[,c(1)]
-row.names(metadata1) <- genomes1
-metadata1 <- metadata1[,-c(1)]
-metadata1 = sample_data(metadata1)
+#set "metadata"
+metadata_flavos = sample_data(metadata_flavos)
 
 #Create phyloseq object
-physeq1 = phyloseq(pfams1, metadata1)
+physeq_clades = phyloseq(pfams_flavos, metadata_flavos)
 
 #Ordination
-ord_clades <- ordinate(physeq1, "NMDS", "bray")
+ord_clades <- ordinate(physeq_clades, "NMDS", "bray")
 
 #Calculate stress 
 ord_clades$stress ## 0.1646015
 
 #NMDS plot
-p1 = plot_ordination(physeq1, ord_clades, type = "samples", color = "Clades")
-p_ord1 <- p1 + scale_color_manual(values = c("#8c8c8c", "#756bb1", "#39ae9a", "#f9bbbb")) + geom_point(size = 3) + theme(axis.line = element_line(colour="grey"), panel.background=element_blank(), text = element_text(size = 20, family = "Arial"))
-print(p_ord1)
+p_clades = plot_ordination(physeq_clades, ord_clades, type = "samples", color = "Clades")
+
+p_ord_clades <- p_clades + scale_color_manual(values = c("#8c8c8c", "#756bb1", "#39ae9a", "#f9bbbb")) + geom_point(size = 5) + theme(legend.text = element_text(face="italic",size=14),axis.line = element_line(colour="grey"), panel.border=element_rect(fill = NA, colour = "grey"), text = element_text(size = 16, family = "Arial"))
+
+print(p_ord_clades)
+
+#Combine both NMDS plots (groups, clades)
+
+final_ord_plot <- ggarrange(p_ord_groups, p_ord_clades, nrow=1)
+print(final_ord_plot)
+
+#Save as high resolution
+ggsave(final_ord_plot, filename = "Final_ord_plot_600dpi.tiff", compression="lzw", dpi=600)
+
+
 ```
 
 ##Unique and shared protein families between groups (Flavobacteriaceae, Cyanobacteria and Proteobacteria) and clades (within Flavobacteriaceae) 
@@ -286,17 +293,20 @@ library(ggpubr)
 ##Per taxon
 df_taxa <- read.csv("Barplots_Mean_Taxa.csv", header=TRUE)
 p <- ggplot(df_taxa, aes(x=Cazymes, y=Mean, fill=Taxa))+geom_bar(position = position_dodge(), stat = "identity", colour='black')+geom_errorbar(aes(ymin=Mean+SE, ymax=Mean-SE), position = position_dodge(0.9), width=0.25)
-p1 <- p+labs(x="CAZymes", y="Mean Relative Abundance")+theme(axis.line = element_line(colour="grey"), panel.background=element_blank(), text=element_text(size = 20, family = "Arial"))+scale_fill_manual(values=c("#33c633", "#253494", "#f94242"))
+p1 <- p+labs(x="CAZyme Classes", y="Mean Cazymes/Mbp")+theme(axis.line = element_line(colour="grey"), panel.background=element_blank(), text=element_text(size = 16, family = "Arial"))+scale_fill_manual(values=c("#33c633", "#253494", "#f94242"))+guides(fill=guide_legend(label.theme = element_text(face="italic", size=12)))
+print(p1)
 
 #Per Clade
 df_clades <- read.csv("Barplots_Mean_Clades.csv", header = TRUE)
 p2 <- ggplot(df_clades, aes(x=Cazymes, y=Mean, fill=Clades))+geom_bar(position = position_dodge(), stat = "identity", colour='black')+geom_errorbar(aes(ymin=Mean+SE, ymax=Mean-SE), position = position_dodge(0.9), width=0.25)
-p3 <- p2+labs(x="CAZymes", y="Mean Relative Abundance")+theme(axis.line = element_line(colour="grey"), panel.background=element_blank(), text=element_text(size = 20, family = "Arial"))+scale_fill_manual(values=c("#8c8c8c", "#756bb1", "#39ae9a", "#f9bbbb"))
+p3 <- p2+labs(x="CAZyme Classes", y="Mean Cazymes/Mbp")+theme(axis.line = element_line(colour="grey"), panel.background=element_blank(), text=element_text(size = 16, family = "Arial"))+scale_fill_manual(values=c("#8c8c8c", "#756bb1", "#39ae9a", "#f9bbbb"))+guides(fill=guide_legend(label.theme = element_text(face="italic", size=12)))
 
 final_plot <- ggarrange(p1, p3, nrow=1)
-final_plot
+print(final_plot)
 
-###Then you use 'Export' and 'Save as Image' options to get the final plot in the desired dimensions
+###Export as high resolution .tiff
+ggsave(final_plot, filename = "Final_barplot.tiff", compression="lzw", dpi=600)
+
 ```
 
 #Gliding Motility and Type 9 Secretion 
