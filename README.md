@@ -8,7 +8,7 @@ Affiliations:
 
 Correspondence: Asimenia Gavriilidou (asimenia.gavriilidou@wur.nl)
 
-This repository contains all the input files and codes used for analysis in the research article by Gavriilidou A, et al. (2020). Comparative genomic analysis of *Flavobacteriaceae*: insights into carbohydrate metabolism, gliding motility and secondary metabolite biosynthesis. *Under Review*.  
+This repository contains all the input files and codes used for analysis in the research article by Gavriilidou A, et al. Comparative genomic analysis of *Flavobacteriaceae*: insights into carbohydrate metabolism, gliding motility and secondary metabolite biosynthesis. BMC Genomics 21, 569 (2020). [https://doi.org/10.1186/s12864-020-06971-7]  
 
 Below is a short description of the repository structure:
 ```{r, eval=FALSE}
